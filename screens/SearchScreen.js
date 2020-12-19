@@ -14,22 +14,23 @@ import {
 import { useStocksContext } from "../contexts/StocksContext";
 import { scaleSize } from "../constants/Layout";
 import { Ionicons } from "@expo/vector-icons";
+import data from '../api_example/ExampleApi_all.json';
 
 // FixMe: implement other components and functions used in SearchScreen here (don't just put all the JSX in SearchScreen below)
 
 export default function SearchScreen({ navigation }) {
   const { ServerURL, addToWatchlist } = useStocksContext();
   const [state, setState] = useState([]);
-  const [searchState, setSearch] = useState("");
+  const [searchState, setSearch] = useState('');
   const [filtered, setFiltered] = useState([]);
 
   // can put more code here
 
-  const filterSearch = (text) => {
+  const filterSearch = text => {
     setSearch(text);
 
     const filteredResults = state.filter(
-      (stock) =>
+      stock =>
         stock.symbol.toLowerCase().includes(text.toLowerCase()) ||
         stock.name.toLowerCase().includes(text.toLowerCase())
     );
@@ -37,12 +38,12 @@ export default function SearchScreen({ navigation }) {
     setFiltered(filteredResults);
   };
 
-  const addNavigate = (symbol) => {
+  const addNavigate = symbol => {
     addToWatchlist(symbol);
-    navigation.navigate("Stocks");
+    navigation.navigate('Stocks');
   };
 
-  const renderStocks = filtered.map((stock) => (
+  const renderStocks = filtered.map(stock => (
     <TouchableOpacity
       key={stock.symbol}
       onPress={() => addNavigate(stock.symbol)}
@@ -54,13 +55,20 @@ export default function SearchScreen({ navigation }) {
     </TouchableOpacity>
   ));
 
+  // useEffect(() => {
+  //   // FixMe: fetch symbol names from the server and save in local SearchScreen state
+  //   fetch(ServerURL + '/all')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setState(data);
+  //     });
+  // }, []);
+
   useEffect(() => {
     // FixMe: fetch symbol names from the server and save in local SearchScreen state
-    fetch(ServerURL + "/all")
-      .then((response) => response.json())
-      .then((data) => {
+  
         setState(data);
-      });
+     
   }, []);
 
   return (
@@ -81,7 +89,7 @@ export default function SearchScreen({ navigation }) {
             placeholder="search"
             placeholderTextColor="white"
             value={searchState}
-            onChangeText={(text) => filterSearch(text)}
+            onChangeText={text => filterSearch(text)}
           />
         </View>
         <SafeAreaView>

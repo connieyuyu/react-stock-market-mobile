@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useStocksContext } from "../contexts/StocksContext";
 import { scaleSize } from "../constants/Layout";
+import historyData from '../api_example/ExampleApi_history.json.json';
 
 // FixMe: implement other components and functions used in StocksScreen here (don't just put all the JSX in StocksScreen below)
 
@@ -108,10 +109,11 @@ export default function StocksScreen({ route }) {
           let arr = [];
           await Promise.all(
             watchList.map(async (item) => {
-              let url = ServerURL + "/history?symbol=" + item;
+              // let url = ServerURL + "/history?symbol=" + item;
+              let url = `https://sandbox.iexapis.com/stable/stock/${item}/intraday-prices?token=${API_KEY}`;
               await fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
+                .then(response => response.json())
+                .then(data => {
                   arr.push(data[0]);
                 });
             })
